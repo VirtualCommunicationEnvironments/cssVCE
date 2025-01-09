@@ -2,6 +2,17 @@
 // npm install ws
 // node server.js
 
+// To run in azure without having to write "sudo node server.js"
+// https://www.digitalocean.com/community/tutorials/how-to-use-pm2-to-setup-a-node-js-production-environment-on-an-ubuntu-vps#give-safe-user-permission-to-use-port-80
+// sudo apt-get install libcap2-bin
+// sudo set cap cap_net_bind_service=+ep /usr/local/bin/node    or    sudo setcap cap_net_bind_service=+ep `readlink -f \`which node\``    https://stackoverflow.com/questions/60372618/nodejs-listen-eacces-permission-denied-0-0-0-080
+
+
+// Pm2
+// pm2 start server.js --name "cssVCE"
+// pm2 list
+// pm2 startup
+// pm2 save
 
 const http = require('http');
 const WebSocket = require('ws');
