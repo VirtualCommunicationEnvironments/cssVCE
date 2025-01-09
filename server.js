@@ -54,22 +54,32 @@ const wsServers = WS_PORTS.map((port) => {
     // Handle incoming messages
     ws.on('message', (data) => {
       try {
-
-
-        const message = JSON.parse(data);
-
-        // Validate message format
-        if (typeof message === 'string') {
-          // Store the message
-          messages.push(message);
-
-          // Broadcast the message to all clients
+        // Reset the website
+        if (data == '$reset') {
+          messages.length = 0;
+          // Notify all clients to reset
           wss.clients.forEach((client) => {
             if (client.readyState === WebSocket.OPEN) {
-              client.send(JSON.stringify({ type: 'new', message }));
+              client.send(JSON.stringify({ type: 'reset' }));
             }
           });
+        } else {
+          const message = JSON.parse(data);
+
+          // Validate message format
+          if (typeof message === 'string') {
+            // Store the message
+            messages.push(message);
+
+            // Broadcast the message to all clients
+            wss.clients.forEach((client) => {
+              if (client.readyState === WebSocket.OPEN) {
+                client.send(JSON.stringify({ type: 'new', message }));
+              }
+            });
+          }
         }
+
       } catch (err) {
         console.error('Error processing message:', err);
       }
