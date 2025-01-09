@@ -461,7 +461,85 @@
 			const ruleIndex = styleSheet.insertRule(cssRule, styleSheet.cssRules.length);
 		}
 
-		
+
+		// TODO: BUTTON PRESS SEND MESSAGE WITH WEBSOCKETS
+
+
+
+
+
+
+
+
+		const connectWebSocket = () => {
+			// Attempt to connect to WebSocket server on both ports
+			const ports = [8080, 443];
+			let ws;
+
+			for (const port of ports) {
+				try {
+					ws = new WebSocket(`ws://${location.hostname}:${port}`);
+					ws.onerror = () => console.error(`WebSocket connection failed on port ${port}`);
+					ws.onopen = () => {
+						console.log(`Connected to WebSocket server on port ${port}`);
+						//break; // Stop trying other ports once connected
+					};
+				} catch (err) {
+					console.error(`Failed to connect on port ${port}`, err);
+				}
+			}
+
+			// WebSocket is now connected
+			if (ws) {
+				ws.onmessage = (event) => {
+					const data = JSON.parse(event.data);
+
+					if (data.type === 'history') {
+						// Load message history
+						data.messages.forEach((message) => addMessageToChat(message));
+					} else if (data.type === 'new') {
+						// Add a new message
+						addMessageToChat(data.message);
+					}
+				};
+
+				// Send a message when the user types and clicks send
+				const sendMessage = (message) => {
+					ws.send(JSON.stringify(message));
+				};
+
+				// Example hook for chat input
+				const sendButton = document.getElementById('send-button');
+				const chatInput = document.getElementById('chat-input');
+
+				sendButton.addEventListener('click', () => {
+					const message = chatInput.value.trim();
+					if (message) {
+						sendMessage(message);
+						chatInput.value = ''; // Clear the input box
+					}
+				});
+			}
+		};
+
+		const addMessageToChat = (message) => {
+			const messagesArea = document.getElementById('messages-area');
+			const messageDiv = document.createElement('div');
+			messageDiv.textContent = message;
+			messagesArea.appendChild(messageDiv);
+		};
+
+		// Start WebSocket connection
+		connectWebSocket();
+
+
+
+
+
+
+
+
+
 		// Example Usage:
 		const message = "div { background: blue; }";
 		applyCSSRule(message);
