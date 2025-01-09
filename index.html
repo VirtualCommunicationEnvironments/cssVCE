@@ -344,24 +344,37 @@
 			const chatInput = document.getElementById('chat-input');
 			const sendButton = document.getElementById('send-button');
 
+			const chatWidth = 400;
+
 			// Body
 			Object.assign(document.body.style, {
+				all: 'unset',
 				margin: '0px',
-				width: '100vw'
+				width: '100vw',
+				display: 'block',
 			});
+
+			// Container
+			Object.assign(container.style, {
+				all: 'unset',
+				// display: 'block',
+			})
 
 			// Zen garden container style
 			Object.assign(zengardenContainer.style, {
-				width: 'calc(100vw - 340px)',
+				all: 'unset',
+				width: 'calc(100vw - '+ (chatWidth + 40) +'px)',
+				display: 'block',
 			});
 
 			// Chat container styles
 			Object.assign(chatContainer.style, {
+				all: 'unset',
 				position: 'fixed',
 				top: '0',
 				right: '0',
 				bottom: '0',
-				width: '300px',
+				width: chatWidth + 'px',
 				backgroundColor: '#f4f4f9',
 				boxShadow: '-2px 0 5px rgba(0,0,0,0.1)',
 				display: 'flex',
@@ -373,6 +386,7 @@
 
 			// Messages area styles
 			Object.assign(messagesArea.style, {
+				all: 'unset',
 				flex: '1',
 				overflowY: 'auto',
 				marginBottom: '10px',
@@ -384,6 +398,7 @@
 
 			// Input area styles
 			Object.assign(inputArea.style, {
+				all: 'unset',
 				display: 'flex',
 				gap: '10px',
 				'align-items': 'center',
@@ -391,15 +406,18 @@
 
 			// Chat input styles
 			Object.assign(chatInput.style, {
+				all: 'unset',
 				flex: '1',
 				padding: '10px',
 				border: '1px solid #ccc',
 				borderRadius: '5px',
-				height: '200px'
+				height: '200px',
+				background: 'white'
 			});
 
 			// Send button styles
 			Object.assign(sendButton.style, {
+				all: 'unset',
 				padding: '10px 20px',
 				border: 'none',
 				borderRadius: '5px',
@@ -459,7 +477,6 @@
 		}
 
 
-		// TODO: BUTTON PRESS SEND MESSAGE WITH WEBSOCKETS
 
 
 
@@ -528,9 +545,23 @@
 			}
 		};
 
+
+
+
+
+
+
+
+		// ACTIONS ON THE CHAT WHEN RECEIVEING MESSAGES
 		const addMessageToChat = (message) => {
 			const messagesArea = document.getElementById('messages-area');
 			const messageDiv = document.createElement('div');
+			Object.assign(messageDiv.style, {
+				all: 'unset',
+				display: 'block',
+				'box-shadow': '0 0 4px rgba(0, 0, 0, 0.4)',
+				padding: '4px',
+			})
 			messageDiv.textContent = message;
 			messagesArea.appendChild(messageDiv);
 			// Apply style
