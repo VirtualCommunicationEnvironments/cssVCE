@@ -14,18 +14,39 @@
 // pm2 startup
 // pm2 save
 
+// SSL
+// Go to "relativePath" and execute
+// openssl req -nodes -new -x509 -keyout key.pem -out cert.pem
+
+// add file config.json with shape
+// {
+//   "keyPath": "./relativePath/key.pem",
+//   "certPath": "./relativePath/cert.pem"
+// }
+
+
 const http = require('http');
+const https = require('https');
 const WebSocket = require('ws');
 const fs = require('fs');
+const path = require('path');
+
+// Read the key and certificate files
+const config = require('./config.json');
+// Read the key and certificate files using the paths from config.json
+const options = {
+  key: fs.readFileSync(path.resolve(__dirname, config.keyPath)),
+  cert: fs.readFileSync(path.resolve(__dirname, config.certPath)),
+};
 
 // Port for HTTP server
-const HTTP_PORT = 80;
+const HTTP_PORT = 443; // 80
 
 // Ports for WebSocket server
-const WS_PORTS = [8080, 443];
+const WS_PORTS = [8080, 80]; //[8080, 443];
 
 // Serve the `index.html`
-const server = http.createServer((req, res) => {
+const server = https.createServer(options, (req, res) => { // http.createServer((req, res) => {
   if (req.url === '/' && req.method === 'GET') {
     fs.readFile('index.html', (err, data) => {
       if (err) {
