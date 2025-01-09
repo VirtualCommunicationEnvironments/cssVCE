@@ -429,23 +429,39 @@
 
 
 
-		function applyCSSRule(cssRule) {
+		function isCSSRuleValid(cssRule) {
 			// Basic validation for input format (e.g., "div { background: red; }")
 			const cssPattern = /^\s*[a-zA-Z0-9.#:>+\-\[\]\s]+\s*\{[^}]+\}\s*$/;
 			if (!cssPattern.test(cssRule)) {
 				alert('Invalid CSS syntax.');
-				return;
+				return false;
 			}
 
 			try {
 				// Dynamically apply the style
 				const styleSheet = document.styleSheets[0];
-				styleSheet.insertRule(cssRule, styleSheet.cssRules.length);
+				const ruleIndex = styleSheet.insertRule(cssRule, styleSheet.cssRules.length);
+				styleSheet.deleteRule(ruleIndex);
+				return true;
 			} catch (error) {
 				alert('Error applying CSS: ' + error.message);
+				return false;
 			}
+
+			return true;
 		}
 
+		function applyCSSRule(cssRule) {
+			if (!isCSSRuleValid(cssRule)) {
+				return;
+			}
+
+			// Apply rule
+			const styleSheet = document.styleSheets[0];
+			const ruleIndex = styleSheet.insertRule(cssRule, styleSheet.cssRules.length);
+		}
+
+		
 		// Example Usage:
 		const message = "div { background: blue; }";
 		applyCSSRule(message);
