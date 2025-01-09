@@ -5,7 +5,7 @@
 	<meta charset="utf-8">
 	<title>VCE CSS with Zen Garden</title>
 
-	<!-- <link rel="stylesheet" media="screen" href="style.css?v=8may2013"> -->
+	<link rel="stylesheet" media="screen" href="style.css">
 	<link rel="alternate" type="application/rss+xml" title="RSS" href="http://www.csszengarden.com/zengarden.xml">
 
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -57,7 +57,8 @@
 		<div id="container-chat">
 			<div id="messages-area"></div>
 			<div id="input-area">
-				<textarea id="chat-input" type="text" placeholder="Type CSS as in 'div {background: red}' or '.myClass {padding: 10px}"></textarea>
+				<textarea id="chat-input" type="text"
+					placeholder="Type CSS as in 'div {background: red}' or '.myClass {padding: 10px}"></textarea>
 				<button id="send-button">Send</button>
 			</div>
 		</div>
@@ -351,7 +352,7 @@
 
 			// Zen garden container style
 			Object.assign(zengardenContainer.style, {
-				width:'calc(100vw - 340px)',
+				width: 'calc(100vw - 340px)',
 			});
 
 			// Chat container styles
@@ -425,6 +426,29 @@
 
 		// Apply initial styles on load
 		applyChatStyles();
+
+
+
+		function applyCSSRule(cssRule) {
+			// Basic validation for input format (e.g., "div { background: red; }")
+			const cssPattern = /^\s*[a-zA-Z0-9.#:>+\-\[\]\s]+\s*\{[^}]+\}\s*$/;
+			if (!cssPattern.test(cssRule)) {
+				alert('Invalid CSS syntax.');
+				return;
+			}
+
+			try {
+				// Dynamically apply the style
+				const styleSheet = document.styleSheets[0];
+				styleSheet.insertRule(cssRule, styleSheet.cssRules.length);
+			} catch (error) {
+				alert('Error applying CSS: ' + error.message);
+			}
+		}
+
+		// Example Usage:
+		const message = "div { background: blue; }";
+		applyCSSRule(message);
 	</script>
 </body>
 
