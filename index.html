@@ -58,7 +58,7 @@
 			<div id="messages-area"></div>
 			<div id="input-area">
 				<textarea id="chat-input" type="text"
-					placeholder="Type CSS as in '.summary {background: red}' or '#zen-intro {padding: 10px}"></textarea>
+					placeholder="Type CSS as in '.summary {background: red}' or '#zen-intro {padding: 10px}. Press Ctrl+Enter to send or press the Send button."></textarea>
 				<button id="send-button">Send</button>
 			</div>
 		</div>
@@ -521,6 +521,10 @@
 					}
 				};
 
+
+
+
+				// MESSAGE SENDING
 				// Send a message when the user types and clicks send
 				const sendMessage = (message) => {
 					ws.send(JSON.stringify(message));
@@ -530,7 +534,7 @@
 				const sendButton = document.getElementById('send-button');
 				const chatInput = document.getElementById('chat-input');
 
-				sendButton.addEventListener('click', () => {
+				const processInput = () => {
 					const message = chatInput.value.trim();
 					if (message == '$reset'){
 						ws.send(message);
@@ -541,7 +545,18 @@
 						chatInput.value = ''; // Clear the input box
 					}
 					chatInput.focus();
-				});
+				};
+
+				// Send button
+				sendButton.addEventListener('click', processInput);
+				// Ctrl + Enter
+				document.addEventListener('keydown', (e) => {
+					console.log(e.key);
+					if (e.ctrlKey && e.key === 'Enter') {
+						console.log("processing input");
+						processInput();
+					}
+				})
 			}
 		};
 
@@ -588,7 +603,8 @@
 
 		// Start WebSocket connection
 		connectWebSocket();
-
+		const chatInput = document.getElementById('chat-input');
+		chatInput.focus();
 
 
 
